@@ -1,0 +1,26 @@
+service: user-engagement
+
+frameworkVersion: '3'
+
+custom:
+  connection-string:
+    dev: 'PREPROD_DATABASE_URL'
+    prod: 'PRODUCTION_DATABASE_URL'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: ${opt:stage, 'dev'}
+  region: eu-west-1
+  logRetentionInDays: 30
+  environment:
+    stage_name: ${self:provider.stage}
+    dbconnectionstring: ${ssm:/${self:custom.connection-string.${self:provider.stage}}}
+    slacktoken: ${ssm:/ENTOURAGE_AWS_LAMBDA_APP_SLACK_TOKEN}
+    channelId: 'CRNGQU2K1'
+
+functions:
+  agregate:
+    handler: handler.agregate
+    events:
+      - schedule: cron(0 5 * * ? *)
