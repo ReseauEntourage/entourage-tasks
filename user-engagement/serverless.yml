@@ -20,7 +20,7 @@ provider:
     channelId: 'CRNGQU2K1'
 
 functions:
-  agregate:
-    handler: handler.agregate
+  aggregate:
+    handler: handler.aggregate
     events:
       - schedule: cron(0 5 * * ? *)

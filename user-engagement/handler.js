@@ -38,7 +38,7 @@ async function publishMessage(id, text) {
   }
 }
 
-module.exports.agregate = async () => {
+module.exports.aggregate = async () => {
   if (!pgPool) {
     await setupPgPool();
   }
@@ -97,7 +97,7 @@ module.exports.agregate = async () => {
     let start = "beginning";
     if(max_date != null ) start = max_date.toISOString();
 
-    publishMessage(process.env.channelId, 
+    await publishMessage(process.env.channelId, 
       "User Engagement Consolidation: OK on stage:"+process.env.stage_name+"\n "
       + rowCount + " new daily engagements from "+start+" to now."
     );
@@ -113,7 +113,7 @@ module.exports.agregate = async () => {
       }),
     };
   } catch (e) {
-    publishMessage(process.env.channelId, "Error in User Engagement Consolidation on stage:"+process.env.stage_name);
+    await publishMessage(process.env.channelId, "Error in User Engagement Consolidation on stage:"+process.env.stage_name);
     return {
       statusCode: 500,
       body: JSON.stringify({
