@@ -1,0 +1,64 @@
+service: resize-app-upload
+
+custom:
+  bucket_suffix:
+    dev: 'development'
+    staging: 'development'
+    prod: 'production'
+  dir_prefix:
+    dev: ''
+    staging: 'staging/'
+    prod: ''
+  
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: ${opt:stage, 'staging'}
+  region: eu-west-1
+  logRetentionInDays: 30
+  environment :
+    watch_bucket: "entourage-images-${self:custom.bucket_suffix.${self:provider.stage}}"
+    watch_dir1: "${self:custom.dir_prefix.${self:provider.stage}}announcements/"
+    watch_dir2: "${self:custom.dir_prefix.${self:provider.stage}}chat_messages/"
+    watch_dir3: "${self:custom.dir_prefix.${self:provider.stage}}contributions/"
+    watch_dir4: "${self:custom.dir_prefix.${self:provider.stage}}entourage_images/"
+    watch_dir5: "${self:custom.dir_prefix.${self:provider.stage}}neighborhoods/"
+    watch_dir6: "${self:custom.dir_prefix.${self:provider.stage}}organizations/"
+    watch_dir7: "${self:custom.dir_prefix.${self:provider.stage}}recommandations/"
+    watch_dir8: "${self:custom.dir_prefix.${self:provider.stage}}resources/"
+    target_bucket: "entourage-images-${self:custom.bucket_suffix.${self:provider.stage}}"
+    target_size: 400
+    target_dir_prefix: "${self:custom.dir_prefix.${self:provider.stage}}medium/"
+    small_target_size: 60
+    small_target_dir_prefix: "${self:custom.dir_prefix.${self:provider.stage}}small/"
+    dir_prefix: ${self:custom.dir_prefix.${self:provider.stage}}
+    source_dir: "${self:custom.dir_prefix.${self:provider.stage}}source/"
+    request_string: ${self:functions.resize-app-upload.name}
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - s3:*
+          Resource: "*"
+
+functions:
+  resize-app-upload:
+    name: resize-app-upload-${self:provider.stage}
+    handler: handler.resizeAppUpload
+    events:
+      - s3:
+          bucket: ${self:provider.environment.watch_bucket}
+          event: s3:ObjectCreated:*
+          existing: true
+          rules:
+            - prefix: ${self:provider.environment.watch_dir1}
+            - prefix: ${self:provider.environment.watch_dir2}
+            - prefix: ${self:provider.environment.watch_dir3}
+            - prefix: ${self:provider.environment.watch_dir4}
+            - prefix: ${self:provider.environment.watch_dir5}
+            - prefix: ${self:provider.environment.watch_dir6}
+            - prefix: ${self:provider.environment.watch_dir7}
+            - prefix: ${self:provider.environment.watch_dir8}
