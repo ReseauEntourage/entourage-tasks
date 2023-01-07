@@ -20,7 +20,7 @@ then resizes it to 60x60 pixels max in small dir,
 
 > sls deploy -s prod
 
-Upload time: around s
+Upload time: around 70s
 
 ## External lib
 
@@ -74,3 +74,13 @@ aws s3 ls entourage-images-development/staging/source/entourage_images/testFPima
 aws s3 ls entourage-images-development/staging/medium/entourage_images/testFPimageEntourage.jpeg
 aws s3 ls entourage-images-development/staging/small/entourage_images/testFPimageEntourage.jpeg
  
+
+aws s3 cp --metadata {\"touched\":\"true\"} s3://entourage-images-development/staging/entourage_images/ s3://entourage-images-development/staging/entourage_images/ --recursive
+
+aws s3 cp --metadata {\"touched\":\"true\"} s3://entourage-images-development/staging/announcements/ s3://entourage-images-development/staging/announcements/ --recursive
+aws s3 cp --metadata {\"touched\":\"true\"} s3://entourage-images-development/staging/chat_messages/ s3://entourage-images-development/staging/chat_messages/ --recursive
+aws s3 cp --metadata {\"touched\":\"true\"} s3://entourage-images-development/staging/contributions/ s3://entourage-images-development/staging/contributions/ --recursive
+aws s3 cp --metadata {\"touched\":\"true\"} s3://entourage-images-development/staging/neighborhoods/ s3://entourage-images-development/staging/neighborhoods/ --recursive
+aws s3 cp --metadata {\"touched\":\"true\"} s3://entourage-images-development/staging/organizations/ s3://entourage-images-development/staging/organizations/ --recursive
+aws s3 cp --metadata {\"touched\":\"true\"} s3://entourage-images-development/staging/recommandations/ s3://entourage-images-development/staging/recommandations/ --recursive
+aws s3 cp --metadata {\"touched\":\"true\"} s3://entourage-images-development/staging/resources/ s3://entourage-images-development/staging/resources/ --recursive

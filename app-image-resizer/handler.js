@@ -63,7 +63,8 @@ module.exports.resizeAppUpload = async (event, context) => {
     await s3.copyObject({
         Bucket: targetBucket, 
         Key: targetKey, 
-        CopySource: srcBucket + "/" + srcKey
+        CopySource: srcBucket + "/" + srcKey,
+        CopySourceIfNoneMatch: event.Records[0].s3.object.eTag
       })
       .promise()
     console.log("Saving to " + targetKey + " on " + targetBucket)
