@@ -55,10 +55,45 @@ functions:
           existing: true
           rules:
             - prefix: ${self:provider.environment.watch_dir1}
+      - s3:
+          bucket: ${self:provider.environment.watch_bucket}
+          event: s3:ObjectCreated:*
+          existing: true
+          rules:
             - prefix: ${self:provider.environment.watch_dir2}
+      - s3:
+          bucket: ${self:provider.environment.watch_bucket}
+          event: s3:ObjectCreated:*
+          existing: true
+          rules:
             - prefix: ${self:provider.environment.watch_dir3}
+      - s3:
+          bucket: ${self:provider.environment.watch_bucket}
+          event: s3:ObjectCreated:*
+          existing: true
+          rules:
             - prefix: ${self:provider.environment.watch_dir4}
+      - s3:
+          bucket: ${self:provider.environment.watch_bucket}
+          event: s3:ObjectCreated:*
+          existing: true
+          rules:
             - prefix: ${self:provider.environment.watch_dir5}
+      - s3:
+          bucket: ${self:provider.environment.watch_bucket}
+          event: s3:ObjectCreated:*
+          existing: true
+          rules:
             - prefix: ${self:provider.environment.watch_dir6}
+      - s3:
+          bucket: ${self:provider.environment.watch_bucket}
+          event: s3:ObjectCreated:*
+          existing: true
+          rules:
             - prefix: ${self:provider.environment.watch_dir7}
+      - s3:
+          bucket: ${self:provider.environment.watch_bucket}
+          event: s3:ObjectCreated:*
+          existing: true
+          rules:
             - prefix: ${self:provider.environment.watch_dir8}
