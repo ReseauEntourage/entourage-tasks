@@ -4,6 +4,15 @@ const AWS = require('aws-sdk')
 const s3 = new AWS.S3()
 const sharp  = require('sharp')
 
+// Require the Node Slack SDK package (github.com/slackapi/node-slack-sdk)
+const { WebClient, LogLevel } = require("@slack/web-api");
+
+// WebClient instantiates a client that can call API methods
+const client = new WebClient(process.env.slacktoken, {
+  // LogLevel can be imported and used to make debugging simpler
+  logLevel: LogLevel.ERROR
+});
+
 const targetBucket=process.env.target_bucket
 const targetSize = process.env.target_size
 const targetDir=process.env.target_dir_prefix
@@ -12,6 +21,20 @@ const targetSmallDir=process.env.small_target_dir_prefix
 const dirPrefix=process.env.dir_prefix
 const sourceDir=process.env.source_dir
 const requestString = process.env.request_string
+
+// Post a message to a channel your app is in using ID and message text
+async function publishMessage(id, text) {
+  try {
+    // Call the chat.postMessage method using the built-in WebClient
+    const result = await client.chat.postMessage({
+      channel: id,
+      text: text
+    });
+  }
+  catch (error) {
+    console.error(error);
+  }
+}
 
 /*
   * Transformations begin
@@ -99,8 +122,16 @@ module.exports.resizeAppUpload = async (event, context) => {
     /*
      * Transformations end
      */
+    await publishMessage(process.env.channelId, 
+      "Uploaded image resize: OK on bucket: "+targetBucket+" for file "+ srcKey
+    );
 
   } catch (error) {
+    await publishMessage(process.env.channelId, 
+      "Uploaded image resize: ERROR on bucket: "+targetBucket
+      + "\n Error: "+ JSON.stringify()
+    );
+
     console.error(error)
   }
   console.debug ('********** END ************')

@@ -1,5 +1,7 @@
 service: resize-app-upload
 
+frameworkVersion: '3'
+
 custom:
   bucket_suffix:
     dev: 'development'
@@ -35,6 +37,8 @@ provider:
     dir_prefix: ${self:custom.dir_prefix.${self:provider.stage}}
     source_dir: "${self:custom.dir_prefix.${self:provider.stage}}source/"
     request_string: ${self:functions.resize-app-upload.name}
+    slacktoken: ${ssm:/ENTOURAGE_AWS_LAMBDA_APP_SLACK_TOKEN}
+    channelId: 'CRNGQU2K1'
 
   iam:
     role:

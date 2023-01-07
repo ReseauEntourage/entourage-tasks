@@ -9,9 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@slack/web-api": "^6.8.0",
     "sharp": "^0.31.3"
   },
   "devDependencies": {
-    "aws-sdk": "^2.1289.0"
+    "aws-sdk": "^2.1290.0"
   }
 }
