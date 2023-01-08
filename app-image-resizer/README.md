@@ -48,7 +48,7 @@ Copying Staging files for Dev
 
 > serverless invoke local --function resize-app-upload -p ./test/event.json --stage prod
 
-> serverless invoke local --function resize-app-upload -p ./test/event_dev.json --stage dev
+> serverless invoke local --function resize-app-upload -p ./test/event_dev.json --stage staging
 
 ## TO DO 
 - record action into BDD

@@ -3,6 +3,7 @@
 const AWS = require('aws-sdk')
 const s3 = new AWS.S3()
 const sharp  = require('sharp')
+const pg = require('pg');
 
 // Require the Node Slack SDK package (github.com/slackapi/node-slack-sdk)
 const { WebClient, LogLevel } = require("@slack/web-api");
@@ -12,6 +13,19 @@ const client = new WebClient(process.env.slacktoken, {
   // LogLevel can be imported and used to make debugging simpler
   logLevel: LogLevel.ERROR
 });
+
+const pgConfig = {
+  max: 1,
+  connectionString: process.env.dbconnectionstring,
+  ssl: { rejectUnauthorized: false },
+};
+
+// Pool will be reused for each invocation of the backing container.
+let pgPool;
+
+const setupPgPool = () => {
+  pgPool = new pg.Pool(pgConfig);
+};
 
 const targetBucket=process.env.target_bucket
 const targetSize = process.env.target_size
@@ -64,12 +78,16 @@ module.exports.resizeAppUpload = async (event, context) => {
     return
   }
   
-  try {
-    const srcBucket = event.Records[0].s3.bucket.name
-    //console.debug("srcBucket="+srcBucket);
-    const srcKey = decodeURIComponent(event.Records[0].s3.object.key.replace(/\+/g, " ")) ;
-    //console.debug("srcKey="+srcKey);
+  const srcBucket = event.Records[0].s3.bucket.name
+  //console.debug("srcBucket="+srcBucket);
+  const srcKey = decodeURIComponent(event.Records[0].s3.object.key.replace(/\+/g, " ")) ;
+  //console.debug("srcKey="+srcKey);
 
+  try {
+    if (!pgPool) {
+      await setupPgPool();
+    }
+  
     const typeMatch = srcKey.match(/\.([^.]*)$/) ;
     //TODO check if typematch a au moins 2 parts
     //console.info("typeMatch="+typeMatch);
@@ -86,8 +104,7 @@ module.exports.resizeAppUpload = async (event, context) => {
     await s3.copyObject({
         Bucket: targetBucket, 
         Key: targetKey, 
-        CopySource: srcBucket + "/" + srcKey,
-        CopySourceIfNoneMatch: event.Records[0].s3.object.eTag
+        CopySource: srcBucket + "/" + srcKey
       })
       .promise()
     console.log("Saving to " + targetKey + " on " + targetBucket)
@@ -126,11 +143,15 @@ module.exports.resizeAppUpload = async (event, context) => {
       "Uploaded image resize: OK on bucket: "+targetBucket+" for file "+ srcKey
     );
 
+    await pgPool.query("insert into image_resize_actions VALUES ('"+targetBucket+"', '"+srcKey+"', NOW(), 'OK') ")
+
   } catch (error) {
     await publishMessage(process.env.channelId, 
       "Uploaded image resize: ERROR on bucket: "+targetBucket
       + "\n Error: "+ JSON.stringify()
     );
+
+    await pgPool.query("insert into image_resize_actions VALUES ('"+targetBucket+"', '"+srcKey+"', NOW(), 'Error') ")
 
     console.error(error)
   }

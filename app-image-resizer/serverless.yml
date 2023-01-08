@@ -11,7 +11,10 @@ custom:
     dev: ''
     staging: 'staging/'
     prod: ''
-  
+  connection-string:
+    dev: 'PREPROD_DATABASE_URL'
+    staging: 'PREPROD_DATABASE_URL'
+    prod: 'PRODUCTION_DATABASE_URL'
 
 provider:
   name: aws
@@ -39,6 +42,7 @@ provider:
     request_string: ${self:functions.resize-app-upload.name}
     slacktoken: ${ssm:/ENTOURAGE_AWS_LAMBDA_APP_SLACK_TOKEN}
     channelId: 'CRNGQU2K1'
+    dbconnectionstring: ${ssm:/${self:custom.connection-string.${self:provider.stage}}}
 
   iam:
     role:
