@@ -1,5 +1,7 @@
 service: resize-avatar
 
+frameworkVersion: '3'
+
 custom:
   bucket_suffix:
     dev: 'production-thumb'
@@ -9,6 +11,10 @@ custom:
     dev: 'staging/'
     staging: 'users/'
     prod: ''
+  connection-string:
+    dev: 'PREPROD_DATABASE_URL'
+    staging: 'PREPROD_DATABASE_URL'
+    prod: 'PRODUCTION_DATABASE_URL'
 
 provider:
   name: aws
@@ -26,6 +32,9 @@ provider:
     small_target_dir: "${self:custom.dir_prefix.${self:provider.stage}}60x60/"
     source_dir: "${self:custom.dir_prefix.${self:provider.stage}}source/"
     request_string: ${self:functions.resize-avatar.name}
+    slacktoken: ${ssm:/ENTOURAGE_AWS_LAMBDA_APP_SLACK_TOKEN}
+    channelId: 'CRNGQU2K1'
+    dbconnectionstring: ${ssm:/${self:custom.connection-string.${self:provider.stage}}}
 
   iam:
     role:

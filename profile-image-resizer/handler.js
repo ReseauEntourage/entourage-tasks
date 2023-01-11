@@ -1,8 +1,31 @@
 'use strict'
 
-const AWS = require('aws-sdk')
-const s3 = new AWS.S3()
-const sharp  = require('sharp')
+const AWS = require('aws-sdk');
+const s3 = new AWS.S3();
+const sharp  = require('sharp');
+const pg = require('pg');
+
+// Require the Node Slack SDK package (github.com/slackapi/node-slack-sdk)
+const { WebClient, LogLevel } = require("@slack/web-api");
+
+// WebClient instantiates a client that can call API methods
+const client = new WebClient(process.env.slacktoken, {
+  // LogLevel can be imported and used to make debugging simpler
+  logLevel: LogLevel.ERROR
+});
+
+const pgConfig = {
+  max: 1,
+  connectionString: process.env.dbconnectionstring,
+  ssl: { rejectUnauthorized: false },
+};
+
+// Pool will be reused for each invocation of the backing container.
+let pgPool;
+
+const setupPgPool = () => {
+  pgPool = new pg.Pool(pgConfig);
+};
 
 const targetBucket=process.env.target_bucket
 const targetSize = process.env.target_size
@@ -11,6 +34,20 @@ const targetSmallSize = process.env.small_target_size
 const targetSmallDir=process.env.small_target_dir
 const sourceDir=process.env.source_dir
 const requestString = process.env.request_string
+
+// Post a message to a channel your app is in using ID and message text
+async function publishMessage(id, text) {
+  try {
+    // Call the chat.postMessage method using the built-in WebClient
+    const result = await client.chat.postMessage({
+      channel: id,
+      text: text
+    });
+  }
+  catch (error) {
+    console.error(error);
+  }
+}
 
 module.exports.resizeAvatar = async (event, context) => {
   //console.log ('******** START *********' + targetBucket + ' '+ targetSize + ' '+ targetDir + ' ') ;
@@ -94,7 +131,24 @@ module.exports.resizeAvatar = async (event, context) => {
      * Transformations end
      */
 
+    await publishMessage(process.env.channelId, 
+      "Uploaded profile image resize: OK on bucket: "+srcBucket+" for file "+ srcKey
+    );
+
+    if (!pgPool) {
+      await setupPgPool();
+    }
+    
+    await pgPool.query("insert into image_resize_actions VALUES ('"+srcBucket+"', '"+srcKey+"', NOW(), 'OK') ")
+
   } catch (error) {
+    await publishMessage(process.env.channelId, 
+      "Uploaded profile image resize: ERROR on bucket: "+srcBucket
+      + "\n Error: "+ JSON.stringify()
+    );
+
+    await pgPool.query("insert into image_resize_actions VALUES ('"+srcBucket+"', '"+srcKey+"', NOW(), 'Error') ")
+
     console.error(error)
   }
   console.debug ('********** END ************')

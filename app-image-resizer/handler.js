@@ -1,8 +1,8 @@
 'use strict'
 
-const AWS = require('aws-sdk')
-const s3 = new AWS.S3()
-const sharp  = require('sharp')
+const AWS = require('aws-sdk');
+const s3 = new AWS.S3();
+const sharp  = require('sharp');
 const pg = require('pg');
 
 // Require the Node Slack SDK package (github.com/slackapi/node-slack-sdk)
