@@ -121,6 +121,7 @@ module.exports.resizeAppUpload = async (event, context) => {
       .promise()
     //console.log("Res: "+JSON.stringify(res2, null, 2))
     console.log("Saving to " + targetKey + " on " + targetBucket)
+    await pgPool.query("insert into fp_image_resize_actions VALUES ('"+targetBucket+"', '"+srcKey+"', '"+targetKey+"', 'small', NOW(), 'OK') ")
 
 
     targetKey  = srcKey.replace(dirPrefix, targetDir)
@@ -135,6 +136,7 @@ module.exports.resizeAppUpload = async (event, context) => {
       .promise()
     //console.log("Res: "+JSON.stringify(res, null, 2))
     console.log("Saving to " + targetKey + " on " + targetBucket)
+    await pgPool.query("insert into fp_image_resize_actions VALUES ('"+targetBucket+"', '"+srcKey+"', '"+targetKey+"', 'medium', NOW(), 'OK') ")
 
     /*
      * Transformations end
@@ -143,15 +145,14 @@ module.exports.resizeAppUpload = async (event, context) => {
       "Uploaded image resize: OK on bucket: "+targetBucket+" for file "+ srcKey
     );
 
-    await pgPool.query("insert into image_resize_actions VALUES ('"+targetBucket+"', '"+srcKey+"', NOW(), 'OK') ")
-
   } catch (error) {
     await publishMessage(process.env.channelId, 
       "Uploaded image resize: ERROR on bucket: "+targetBucket
       + "\n Error: "+ JSON.stringify()
     );
 
-    await pgPool.query("insert into image_resize_actions VALUES ('"+targetBucket+"', '"+srcKey+"', NOW(), 'Error') ")
+    await pgPool.query("insert into fp_image_resize_actions VALUES ('"+targetBucket+"', '"+srcKey+"', '', 'medium', NOW(), 'Error') ")
+    await pgPool.query("insert into fp_image_resize_actions VALUES ('"+targetBucket+"', '"+srcKey+"', '', 'small', NOW(), 'Error') ")
 
     console.error(error)
   }

@@ -101,6 +101,10 @@ module.exports.resizeAvatar = async (event, context) => {
         })
     }
   
+    if (!pgPool) {
+      await setupPgPool();
+    }
+    
     const resizedBuffer2 = await transform(response.Body, targetSmallSize)
     /*if(resizedBuffer)
       console.info('Saving this buffer...'+resizedBuffer) */
@@ -113,6 +117,7 @@ module.exports.resizeAvatar = async (event, context) => {
       .promise()
     //console.log("Res: "+JSON.stringify(res2, null, 2))
     console.log("Saving to " + targetSmallDir + keyFolders[keyFolders.length - 1] + " on " + targetBucket)
+    await pgPool.query("insert into fp_image_resize_actions VALUES ('"+srcBucket+"', '"+srcKey+"', '"+targetSmallDir + keyFolders[keyFolders.length - 1]+"', 'small', NOW(), 'OK') ")
     
     const resizedBuffer = await transform(response.Body, targetSize)
     /*if(resizedBuffer)
@@ -126,6 +131,7 @@ module.exports.resizeAvatar = async (event, context) => {
       .promise()
     //console.log("Res: "+JSON.stringify(res, null, 2))
     console.log("Saving to " + targetDir + keyFolders[keyFolders.length - 1] + " on " + targetBucket)
+    await pgPool.query("insert into fp_image_resize_actions VALUES ('"+srcBucket+"', '"+srcKey+"', '"+targetDir + keyFolders[keyFolders.length - 1]+"', 'medium', NOW(), 'OK') ")
     
     /*
      * Transformations end
@@ -135,19 +141,14 @@ module.exports.resizeAvatar = async (event, context) => {
       "Uploaded profile image resize: OK on bucket: "+srcBucket+" for file "+ srcKey
     );
 
-    if (!pgPool) {
-      await setupPgPool();
-    }
-    
-    await pgPool.query("insert into image_resize_actions VALUES ('"+srcBucket+"', '"+srcKey+"', NOW(), 'OK') ")
-
   } catch (error) {
     await publishMessage(process.env.channelId, 
       "Uploaded profile image resize: ERROR on bucket: "+srcBucket
       + "\n Error: "+ JSON.stringify()
     );
 
-    await pgPool.query("insert into image_resize_actions VALUES ('"+srcBucket+"', '"+srcKey+"', NOW(), 'Error') ")
+    await pgPool.query("insert into fp_image_resize_actions VALUES ('"+srcBucket+"', '"+srcKey+"', '', 'medium', NOW(), 'Error') ")
+    await pgPool.query("insert into fp_image_resize_actions VALUES ('"+srcBucket+"', '"+srcKey+"', '', 'small', NOW(), 'Error') ")
 
     console.error(error)
   }

@@ -45,5 +45,3 @@ To touch existing files (**already done! DO NOT DO IT AGAIN**):
 > serverless invoke local --function resize-avatar -p ./test/event_dev.json --stage dev
 
 ## TO DO 
-- record action into BDD
-- handle PNG files for partner logo

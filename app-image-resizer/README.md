@@ -8,8 +8,8 @@ Deployment on AWS is done manually every time we update this repository
 ## Description
 Images are uplpoaded to directories (announcements, chat_messages, contributions, entourage_images, neighborhoods, organizations, recommandations, resources) by user
 Lambda function copies original file to source dir,
-then resizes it to 400x400 pixels max in root dir,
-then resizes it to 60x60 pixels max in small dir,
+then resizes it to 800x800 pixels max in root dir,
+then resizes it to 120x120 pixels max in small dir,
 
 
 ## DEPLOY:
@@ -84,3 +84,23 @@ aws s3 cp --metadata {\"touched\":\"true\"} s3://entourage-images-development/st
 aws s3 cp --metadata {\"touched\":\"true\"} s3://entourage-images-development/staging/organizations/ s3://entourage-images-development/staging/organizations/ --recursive
 aws s3 cp --metadata {\"touched\":\"true\"} s3://entourage-images-development/staging/recommandations/ s3://entourage-images-development/staging/recommandations/ --recursive
 aws s3 cp --metadata {\"touched\":\"true\"} s3://entourage-images-development/staging/resources/ s3://entourage-images-development/staging/resources/ --recursive
+
+
+
+aws s3 cp --metadata {\"touched\":\"true\"} s3://entourage-images-development/staging/chat_messages/98eb489b-ec62-41ee-9745-e7ce12e728f3.jpeg s3://entourage-images-development/staging/chat_messages/98eb489b-ec62-41ee-9745-e7ce12e728f3.jpeg
+
+
+
+
+aws s3 cp s3://entourage-avatars-production-thumb/staging/300x300/testFPavatarEntourage.jpeg s3://entourage-images-development/staging/announcements/testFPimageEntourage.jpeg
+
+
+CREATE TABLE public.image_resize_actions (
+	bucket varchar NULL,
+	"path" varchar null,
+	"destPath" varchar null,
+	"destSize" varchar null, //'medium', 'small'
+	created_at timestamp NULL,
+	status varchar NULL
+);
+

@@ -33,9 +33,9 @@ provider:
     watch_dir7: "${self:custom.dir_prefix.${self:provider.stage}}recommandations/"
     watch_dir8: "${self:custom.dir_prefix.${self:provider.stage}}resources/"
     target_bucket: "entourage-images-${self:custom.bucket_suffix.${self:provider.stage}}"
-    target_size: 400
-    target_dir_prefix: "${self:custom.dir_prefix.${self:provider.stage}}medium/"
-    small_target_size: 60
+    target_size: 800
+    target_dir_prefix: "${self:custom.dir_prefix.${self:provider.stage}}"
+    small_target_size: 120
     small_target_dir_prefix: "${self:custom.dir_prefix.${self:provider.stage}}small/"
     dir_prefix: ${self:custom.dir_prefix.${self:provider.stage}}
     source_dir: "${self:custom.dir_prefix.${self:provider.stage}}source/"
