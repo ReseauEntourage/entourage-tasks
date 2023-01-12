@@ -62,13 +62,12 @@ module.exports.resizeAvatar = async (event, context) => {
   const srcBucket = event.Records[0].s3.bucket.name
   const srcKey = decodeURIComponent(event.Records[0].s3.object.key.replace(/\+/g, " ")) ;
 
+  let small_ok=false
+  let medium_ok = false
+
   try {
-    const typeMatch = srcKey.match(/\.([^.]*)$/) ;
-    //TODO check if typematch a au moins 2 parts
     //console.debug("srcKey="+srcKey);
-    //console.info("typeMatch="+typeMatch);
-    const imageType = typeMatch[1] ;
-  
+    
     const response = await s3
       .getObject({ Bucket: srcBucket, Key: srcKey })
       .promise() // `.promise()` is unconventional and specific to aws-sdk
@@ -117,7 +116,8 @@ module.exports.resizeAvatar = async (event, context) => {
       .promise()
     //console.log("Res: "+JSON.stringify(res2, null, 2))
     console.log("Saving to " + targetSmallDir + keyFolders[keyFolders.length - 1] + " on " + targetBucket)
-    await pgPool.query("insert into fp_image_resize_actions VALUES ('"+srcBucket+"', '"+srcKey+"', '"+targetSmallDir + keyFolders[keyFolders.length - 1]+"', 'small', NOW(), 'OK') ")
+    await pgPool.query("insert into fp_image_resize_actions VALUES (DEFAULT, '"+srcBucket+"', '"+srcKey+"', '"+targetSmallDir + keyFolders[keyFolders.length - 1]+"', 'small', 'OK', NOW(), NOW()) ")
+    small_ok = true
     
     const resizedBuffer = await transform(response.Body, targetSize)
     /*if(resizedBuffer)
@@ -131,8 +131,9 @@ module.exports.resizeAvatar = async (event, context) => {
       .promise()
     //console.log("Res: "+JSON.stringify(res, null, 2))
     console.log("Saving to " + targetDir + keyFolders[keyFolders.length - 1] + " on " + targetBucket)
-    await pgPool.query("insert into fp_image_resize_actions VALUES ('"+srcBucket+"', '"+srcKey+"', '"+targetDir + keyFolders[keyFolders.length - 1]+"', 'medium', NOW(), 'OK') ")
-    
+    await pgPool.query("insert into fp_image_resize_actions VALUES (DEFAULT, '"+srcBucket+"', '"+srcKey+"', '"+targetDir + keyFolders[keyFolders.length - 1]+"', 'medium', 'OK', NOW(), NOW()) ")
+    medium_ok=true
+
     /*
      * Transformations end
      */
@@ -147,8 +148,8 @@ module.exports.resizeAvatar = async (event, context) => {
       + "\n Error: "+ JSON.stringify()
     );
 
-    await pgPool.query("insert into fp_image_resize_actions VALUES ('"+srcBucket+"', '"+srcKey+"', '', 'medium', NOW(), 'Error') ")
-    await pgPool.query("insert into fp_image_resize_actions VALUES ('"+srcBucket+"', '"+srcKey+"', '', 'small', NOW(), 'Error') ")
+    if(small_ok!==true) await pgPool.query("insert into fp_image_resize_actions VALUES (DEFAULT, '"+srcBucket+"', '"+srcKey+"', '', 'medium', 'Error', NOW(), NOW()) ")
+    if(small_ok!==true) await pgPool.query("insert into fp_image_resize_actions VALUES (DEFAULT, '"+srcBucket+"', '"+srcKey+"', '', 'small', 'Error', NOW(), NOW()) ")
 
     console.error(error)
   }

@@ -8,7 +8,8 @@ Deployment on AWS is done manually every time we update this repository
 ## Description
 Images are uplpoaded to directories (announcements, chat_messages, contributions, entourage_images, neighborhoods, organizations, recommandations, resources) by user
 Lambda function copies original file to source dir,
-then resizes it to 800x800 pixels max in root dir,
+then resizes it to 800x800 pixels max in high dir,
+then resizes it to 400x400 pixels max in medium dir (and replace uploaded file in base dir),
 then resizes it to 120x120 pixels max in small dir,
 
 
@@ -28,13 +29,6 @@ Sharp: https://sharp.pixelplumbing.com/changelog
 
 
 ### Optionnal commands
-To touch existing files (**already done! DO NOT DO IT AGAIN**):
-
->aws s3 cp --metadata {\"touched\":\"true\"}  s3://entourage-images-production/entourage_images/ s3://entourage-images-production/entourage_images/ --recursive
-
-Should be done for all subdir
-
-> aws s3 cp --metadata {\"touched\":\"true\"}  s3://entourage-images-development/entourage_images/testFPimageEntourage.jpeg s3://entourage-images-development/entourage_images/testFPimageEntourage.jpeg
 
 Copying Staging files for Dev
 
@@ -98,8 +92,8 @@ aws s3 cp s3://entourage-avatars-production-thumb/staging/300x300/testFPavatarEn
 CREATE TABLE public.image_resize_actions (
 	bucket varchar NULL,
 	"path" varchar null,
-	"destPath" varchar null,
-	"destSize" varchar null, //'medium', 'small'
+	"destination_path" varchar null,
+	"destination_size" varchar null, //'medium', 'small'
 	created_at timestamp NULL,
 	status varchar NULL
 );

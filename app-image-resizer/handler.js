@@ -27,14 +27,20 @@ const setupPgPool = () => {
   pgPool = new pg.Pool(pgConfig);
 };
 
-const targetBucket=process.env.target_bucket
-const targetSize = process.env.target_size
-const targetDir=process.env.target_dir_prefix
-const targetSmallSize = process.env.small_target_size
-const targetSmallDir=process.env.small_target_dir_prefix
 const dirPrefix=process.env.dir_prefix
 const sourceDir=process.env.source_dir
 const requestString = process.env.request_string
+const targetBucket=process.env.target_bucket
+//Medium Res Images
+const targetMediumSize = process.env.medium_target_size
+const targetMediumDir=process.env.medium_target_dir_prefix
+const targetDefaultDir=process.env.default_target_dir_prefix
+//Small Res Images
+const targetSmallSize = process.env.small_target_size
+const targetSmallDir=process.env.small_target_dir_prefix
+//High Res images
+const targetHighSize = process.env.high_target_size
+const targetHighDir=process.env.high_target_dir_prefix
 
 // Post a message to a channel your app is in using ID and message text
 async function publishMessage(id, text) {
@@ -69,10 +75,13 @@ async function transform(data, new_size)
 }
 
 module.exports.resizeAppUpload = async (event, context) => {
-  console.log ('******** START *********' + targetBucket + ' '+ targetSize + ' for '+ targetDir + ' ') ;
+  console.log ('******** START *********' + targetBucket + ' '+ targetMediumSize + ' for '+ targetDefaultDir) ;
   //console.log("Event: "+ JSON.stringify(event, null, 2));
+  
   const requestUser = event.Records[0].userIdentity.principalId;
   //console.debug("Source: "+ requestUser);
+
+  //We first check that this event is not sent by internal lambda when nothing should be done
   if(requestUser.indexOf(requestString)!=-1) {
     console.log("Internal event: exiting.")
     return
@@ -83,16 +92,14 @@ module.exports.resizeAppUpload = async (event, context) => {
   const srcKey = decodeURIComponent(event.Records[0].s3.object.key.replace(/\+/g, " ")) ;
   //console.debug("srcKey="+srcKey);
 
+  let small_ok=false
+  let medium_ok = false
+  let high_ok = false
+
   try {
     if (!pgPool) {
       await setupPgPool();
     }
-  
-    const typeMatch = srcKey.match(/\.([^.]*)$/) ;
-    //TODO check if typematch a au moins 2 parts
-    //console.info("typeMatch="+typeMatch);
-        
-    const imageType = typeMatch[1] ;
   
     const response = await s3
       .getObject({ Bucket: srcBucket, Key: srcKey })
@@ -121,11 +128,12 @@ module.exports.resizeAppUpload = async (event, context) => {
       .promise()
     //console.log("Res: "+JSON.stringify(res2, null, 2))
     console.log("Saving to " + targetKey + " on " + targetBucket)
-    await pgPool.query("insert into fp_image_resize_actions VALUES ('"+targetBucket+"', '"+srcKey+"', '"+targetKey+"', 'small', NOW(), 'OK') ")
+    await pgPool.query("insert into image_resize_actions VALUES (DEFAULT, '"+targetBucket+"', '"+srcKey+"', '"+targetKey+"', 'small', 'OK', NOW(), NOW()) ")
+    small_ok = true
 
 
-    targetKey  = srcKey.replace(dirPrefix, targetDir)
-    const resizedBuffer = await transform(response.Body, targetSize)
+    targetKey  = srcKey.replace(dirPrefix, targetMediumDir)
+    const resizedBuffer = await transform(response.Body, targetMediumSize)
     //if(resizedBuffer) console.info('Saving this buffer...'+resizedBuffer) 
     const res = await s3
       .putObject({
@@ -133,10 +141,34 @@ module.exports.resizeAppUpload = async (event, context) => {
           Key: targetKey,
           Body: resizedBuffer
         })
+      .promise();
+    let targetDefaultKey  = srcKey.replace(dirPrefix, targetDefaultDir)
+      await s3
+      .putObject({
+          Bucket: targetBucket,
+          Key: targetDefaultKey,
+          Body: resizedBuffer
+        })
       .promise()
     //console.log("Res: "+JSON.stringify(res, null, 2))
     console.log("Saving to " + targetKey + " on " + targetBucket)
-    await pgPool.query("insert into fp_image_resize_actions VALUES ('"+targetBucket+"', '"+srcKey+"', '"+targetKey+"', 'medium', NOW(), 'OK') ")
+    await pgPool.query("insert into image_resize_actions VALUES (DEFAULT, '"+targetBucket+"', '"+srcKey+"', '"+targetKey+"', 'medium', 'OK', NOW(), NOW()) ")
+    medium_ok = true
+
+    targetKey  = srcKey.replace(dirPrefix, targetHighDir)
+    const resizedBuffer3 = await transform(response.Body, targetHighSize)
+    //if(resizedBuffer3) console.info('Saving this buffer...'+resizedBuffer) 
+    const res3 = await s3
+      .putObject({
+          Bucket: targetBucket,
+          Key: targetKey,
+          Body: resizedBuffer3
+        })
+      .promise()
+    //console.log("Res: "+JSON.stringify(res3, null, 2))
+    console.log("Saving to " + targetKey + " on " + targetBucket)
+    await pgPool.query("insert into image_resize_actions VALUES (DEFAULT, '"+targetBucket+"', '"+srcKey+"', '"+targetKey+"', 'high', 'OK', NOW(), NOW()) ")
+    high_ok = true
 
     /*
      * Transformations end
@@ -151,8 +183,9 @@ module.exports.resizeAppUpload = async (event, context) => {
       + "\n Error: "+ JSON.stringify()
     );
 
-    await pgPool.query("insert into fp_image_resize_actions VALUES ('"+targetBucket+"', '"+srcKey+"', '', 'medium', NOW(), 'Error') ")
-    await pgPool.query("insert into fp_image_resize_actions VALUES ('"+targetBucket+"', '"+srcKey+"', '', 'small', NOW(), 'Error') ")
+    if(medium_ok!==true) await pgPool.query("insert into image_resize_actions VALUES (DEFAULT, '"+targetBucket+"', '"+srcKey+"', '', 'medium', 'Error', NOW(), NOW()) ")
+    if(small_ok!==true) await pgPool.query("insert into image_resize_actions VALUES (DEFAULT, '"+targetBucket+"', '"+srcKey+"', '', 'small', 'Error', NOW(), NOW()) ")
+    if(high_ok!==true) await pgPool.query("insert into image_resize_actions VALUES (DEFAULT, '"+targetBucket+"', '"+srcKey+"', '', 'high', 'Error', NOW(), NOW()) ")
 
     console.error(error)
   }
