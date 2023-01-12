@@ -107,14 +107,24 @@ module.exports.resizeAppUpload = async (event, context) => {
     console.debug('Getting file from '+srcKey +' on '+srcBucket)
 
     let targetKey  = srcKey.replace(dirPrefix, sourceDir)
-    
-    await s3.copyObject({
+
+    try {
+      await s3.headObject({
+        Bucket: srcBucket, 
+        Key: srcKey
+      })
+      .promise()
+
+      console.log("Source already exists: " + targetKey + " on " + targetBucket)
+    } catch (errorFile){
+      await s3.copyObject({
         Bucket: targetBucket, 
         Key: targetKey, 
         CopySource: srcBucket + "/" + srcKey
       })
       .promise()
-    console.log("Saving to " + targetKey + " on " + targetBucket)
+      console.log("Saving to " + targetKey + " on " + targetBucket)
+    }
     
     targetKey  = srcKey.replace(dirPrefix, targetSmallDir)
     const resizedBuffer2 = await transform(response.Body, targetSmallSize)

@@ -75,13 +75,23 @@ module.exports.resizeAvatar = async (event, context) => {
 
     const keyFolders = srcKey.split("/")
     
-    await s3.copyObject({
+    try {
+      await s3.headObject({
+        Bucket: srcBucket, 
+        Key: srcKey
+      })
+      .promise()
+
+      console.log("Source already exists: " + sourceDir + keyFolders[keyFolders.length - 1] + " on " + targetBucket)
+    } catch (errorFile){
+      await s3.copyObject({
         Bucket: targetBucket, 
         Key: sourceDir + keyFolders[keyFolders.length - 1], 
         CopySource: srcBucket + "/" + srcKey
       })
       .promise()
-    console.log("Saving to " + sourceDir + keyFolders[keyFolders.length - 1] + " on " + targetBucket)
+      console.log("Saving to " + sourceDir + keyFolders[keyFolders.length - 1] + " on " + targetBucket)
+    }
     
     /*
      * Transformations begin
