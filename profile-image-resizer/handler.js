@@ -116,7 +116,7 @@ module.exports.resizeAvatar = async (event, context) => {
       .promise()
     //console.log("Res: "+JSON.stringify(res2, null, 2))
     console.log("Saving to " + targetSmallDir + keyFolders[keyFolders.length - 1] + " on " + targetBucket)
-    await pgPool.query("insert into fp_image_resize_actions VALUES (DEFAULT, '"+srcBucket+"', '"+srcKey+"', '"+targetSmallDir + keyFolders[keyFolders.length - 1]+"', 'small', 'OK', NOW(), NOW()) ")
+    await pgPool.query("insert into image_resize_actions VALUES (DEFAULT, '"+srcBucket+"', '"+srcKey+"', '"+targetSmallDir + keyFolders[keyFolders.length - 1]+"', 'small', 'OK', NOW(), NOW()) ")
     small_ok = true
     
     const resizedBuffer = await transform(response.Body, targetSize)
@@ -131,7 +131,7 @@ module.exports.resizeAvatar = async (event, context) => {
       .promise()
     //console.log("Res: "+JSON.stringify(res, null, 2))
     console.log("Saving to " + targetDir + keyFolders[keyFolders.length - 1] + " on " + targetBucket)
-    await pgPool.query("insert into fp_image_resize_actions VALUES (DEFAULT, '"+srcBucket+"', '"+srcKey+"', '"+targetDir + keyFolders[keyFolders.length - 1]+"', 'medium', 'OK', NOW(), NOW()) ")
+    await pgPool.query("insert into image_resize_actions VALUES (DEFAULT, '"+srcBucket+"', '"+srcKey+"', '"+targetDir + keyFolders[keyFolders.length - 1]+"', 'medium', 'OK', NOW(), NOW()) ")
     medium_ok=true
 
     /*
@@ -148,8 +148,8 @@ module.exports.resizeAvatar = async (event, context) => {
       + "\n Error: "+ JSON.stringify()
     );
 
-    if(small_ok!==true) await pgPool.query("insert into fp_image_resize_actions VALUES (DEFAULT, '"+srcBucket+"', '"+srcKey+"', '', 'medium', 'Error', NOW(), NOW()) ")
-    if(small_ok!==true) await pgPool.query("insert into fp_image_resize_actions VALUES (DEFAULT, '"+srcBucket+"', '"+srcKey+"', '', 'small', 'Error', NOW(), NOW()) ")
+    if(small_ok!==true) await pgPool.query("insert into image_resize_actions VALUES (DEFAULT, '"+srcBucket+"', '"+srcKey+"', '', 'medium', 'Error', NOW(), NOW()) ")
+    if(small_ok!==true) await pgPool.query("insert into image_resize_actions VALUES (DEFAULT, '"+srcBucket+"', '"+srcKey+"', '', 'small', 'Error', NOW(), NOW()) ")
 
     console.error(error)
   }
