@@ -3,11 +3,11 @@ git stash
 echo "----pulling master"
 git checkout master
 git pull
-echo '----cleaning app-image-resizer'
+echo '----cleaning user_engagement'
 rm -r node_modules
 npm install
-echo '----cleaning app-image-resizer'
-serverless deploy -s staging
+echo '----cleaning user_engagement'
+serverless deploy -s prod
 echo '----unstashing code'
 git stash apply
 

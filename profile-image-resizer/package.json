@@ -7,7 +7,7 @@
     "test": "serverless invoke local --function resize-avatar -p ./test/event_dev.json --stage dev",
     "test_prod": "serverless invoke local --function resize-avatar -p ./test/event.json --stage prod",
     "deploy":"./deploy_dev.sh",
-    "deploy_prod": "./deploy_dev.sh"
+    "deploy_prod": "./deploy_prod.sh"
   },
   "author": "",
   "license": "ISC",

@@ -1,4 +1,14 @@
 {
+  "name": "user_engagement",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "test": "serverless invoke local -s dev -f aggregate",
+    "test_prod": "serverless invoke local -s prod -f aggregate",
+    "deploy":"./deploy_dev.sh",
+    "deploy_prod": "./deploy_prod.sh"
+  },
   "dependencies": {
     "@slack/web-api": "^6.8.0",
     "pg": "^8.8.0"
