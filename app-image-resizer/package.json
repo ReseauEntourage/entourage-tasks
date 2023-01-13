@@ -4,7 +4,11 @@
   "description": "",
   "main": "handler.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "serverless invoke local --function resize-app-upload -p ./test/event_dev.json --stage staging",
+    "test_png": "serverless invoke local --function resize-app-upload -p ./test/event_dev_png.json --stage staging",
+    "test_prod": "serverless invoke local --function resize-app-upload -p ./test/event.json --stage prod",
+    "deploy":"./deploy_dev.sh",
+    "deploy_prod": "./deploy_dev.sh"
   },
   "author": "",
   "license": "ISC",
