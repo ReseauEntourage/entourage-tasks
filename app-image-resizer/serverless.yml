@@ -37,7 +37,7 @@ provider:
     source_dir: "${self:custom.dir_prefix.${self:provider.stage}}source/"
     request_string: ${self:functions.resize-app-upload.name}
     slacktoken: ${ssm:/ENTOURAGE_AWS_LAMBDA_APP_SLACK_TOKEN}
-    channelId: 'CRNGQU2K1'
+    channelId: 'C04JT8T0WNN'
     dbconnectionstring: ${ssm:/${self:custom.connection-string.${self:provider.stage}}}
 
   iam:
