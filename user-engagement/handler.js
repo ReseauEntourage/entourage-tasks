@@ -48,18 +48,18 @@ module.exports.aggregate = async () => {
     let max_date = result1.rows[0].max_date;
     
     let result_insertquery2 = "insert into denorm_daily_engagements (date, user_id, postal_code) \
-      select date(timezone('Europe/Paris', created_at at time zone 'UTC')), user_id, coalesce(case when country = 'FR' then postal_code end, 'unkown') \
+      select date(timezone('Europe/Paris', created_at at time zone 'UTC')), user_id, coalesce(case when country = 'FR' then postal_code end, 'unknown') \
       from entourages where entourages.community = 'entourage' and entourages.group_type in ('action', 'outing')";
     
     let result_insertquery3 = "insert into denorm_daily_engagements  (date, user_id, postal_code) \
-      select date(timezone('Europe/Paris', chat_messages.created_at at time zone 'UTC')), chat_messages.user_id, coalesce(case when country = 'FR' then postal_code end, 'unkown') \
+      select date(timezone('Europe/Paris', chat_messages.created_at at time zone 'UTC')), chat_messages.user_id, coalesce(case when country = 'FR' then postal_code end, 'unknown') \
       from chat_messages  \
       join entourages on messageable_type = 'Entourage' and messageable_id = entourages.id and entourages.community = 'entourage' and entourages.group_type in ('action', 'outing') \
       where message_type = 'text'  ";
     
       let result_insertquery4 = "insert into denorm_daily_engagements  (date, user_id, postal_code) \
         select  date(timezone('Europe/Paris', chat_messages.created_at at time zone 'UTC')), chat_messages.user_id,  \
-        coalesce(case when sender_addresses.country = 'FR' then sender_addresses.postal_code end, 'unkown') \
+        coalesce(case when sender_addresses.country = 'FR' then sender_addresses.postal_code end, 'unknown') \
         from chat_messages  \
         join entourages on messageable_type = 'Entourage' and messageable_id = entourages.id and entourages.community = 'entourage' and entourages.group_type = 'conversation'  \
         join users sender on sender.id = chat_messages.user_id  \
@@ -68,7 +68,7 @@ module.exports.aggregate = async () => {
     
       let result_insertquery5 = "insert into denorm_daily_engagements  (date, user_id, postal_code) \
         select date(timezone('Europe/Paris', coalesce(requested_at, join_requests.created_at) at time zone 'UTC')), join_requests.user_id, \
-        coalesce(case when country = 'FR' then postal_code end, 'unkown') \
+        coalesce(case when country = 'FR' then postal_code end, 'unknown') \
         from join_requests  \
         join entourages on joinable_type = 'Entourage' and joinable_id = entourages.id and entourages.community = 'entourage' and entourages.group_type in ('action', 'outing') \
         where (group_type = 'outing' or (message is not null and trim(message, ' \\n') != ''))";
