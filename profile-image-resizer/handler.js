@@ -87,7 +87,8 @@ module.exports.resizeAvatar = async (event, context) => {
       await s3.copyObject({
         Bucket: targetBucket, 
         Key: sourceDir + keyFolders[keyFolders.length - 1], 
-        CopySource: srcBucket + "/" + srcKey
+        CopySource: srcBucket + "/" + srcKey,
+        ACL:"public-read"
       })
       .promise()
       console.log("Saving to " + sourceDir + keyFolders[keyFolders.length - 1] + " on " + targetBucket)
@@ -121,7 +122,8 @@ module.exports.resizeAvatar = async (event, context) => {
       .putObject({
           Bucket: targetBucket,
           Key: targetSmallDir + keyFolders[keyFolders.length - 1],
-          Body: resizedBuffer2
+          Body: resizedBuffer2,
+          ACL:"public-read"
         })
       .promise()
     //console.log("Res: "+JSON.stringify(res2, null, 2))
@@ -136,7 +138,8 @@ module.exports.resizeAvatar = async (event, context) => {
       .putObject({
           Bucket: targetBucket,
           Key: targetDir + keyFolders[keyFolders.length - 1],
-          Body: resizedBuffer
+          Body: resizedBuffer,
+          ACL:"public-read"
         })
       .promise()
     //console.log("Res: "+JSON.stringify(res, null, 2))
