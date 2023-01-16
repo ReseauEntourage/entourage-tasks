@@ -7,7 +7,7 @@ echo '----cleaning app-image-resizer'
 rm -r node_modules
 npm install
 echo '----cleaning app-image-resizer'
-serverless deploy -s staging
+serverless deploy -s dev
 echo '----unstashing code'
 git stash apply
 
