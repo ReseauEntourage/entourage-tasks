@@ -5,12 +5,8 @@ frameworkVersion: '3'
 custom:
   bucket_suffix:
     dev: 'development'
-    staging: 'development'
+    staging: 'staging'
     prod: 'production'
-  dir_prefix:
-    dev: 'dev/'
-    staging: 'staging/'
-    prod: ''
   connection-string:
     dev: 'PREPROD_DATABASE_URL'
     staging: 'PREPROD_DATABASE_URL'
@@ -24,17 +20,17 @@ provider:
   logRetentionInDays: 30
   environment :
     watch_bucket: "entourage-images-${self:custom.bucket_suffix.${self:provider.stage}}"
-    watch_dir: "${self:custom.dir_prefix.${self:provider.stage}}"
+    watch_dir: ""
     target_bucket: "entourage-images-${self:custom.bucket_suffix.${self:provider.stage}}"
     high_target_size: 800
-    high_target_dir_prefix: "${self:custom.dir_prefix.${self:provider.stage}}high/"
+    high_target_dir_prefix: "high/"
     medium_target_size: 400
-    medium_target_dir_prefix: "${self:custom.dir_prefix.${self:provider.stage}}medium/"
-    default_target_dir_prefix: "${self:custom.dir_prefix.${self:provider.stage}}"
+    medium_target_dir_prefix: "medium/"
+    default_target_dir_prefix: ""
     small_target_size: 60
-    small_target_dir_prefix: "${self:custom.dir_prefix.${self:provider.stage}}small/"
-    dir_prefix: ${self:custom.dir_prefix.${self:provider.stage}}
-    source_dir: "${self:custom.dir_prefix.${self:provider.stage}}source/"
+    small_target_dir_prefix: "small/"
+    dir_prefix: ""
+    source_dir: "source/"
     request_string: ${self:functions.resize-app-upload.name}
     slacktoken: ${ssm:/ENTOURAGE_AWS_LAMBDA_APP_SLACK_TOKEN}
     channelId: 'C04JT8T0WNN'

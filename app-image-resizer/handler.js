@@ -27,7 +27,6 @@ const setupPgPool = () => {
   pgPool = new pg.Pool(pgConfig);
 };
 
-const dirPrefix=process.env.dir_prefix
 const sourceDir=process.env.source_dir
 const requestString = process.env.request_string
 const targetBucket=process.env.target_bucket
@@ -106,7 +105,7 @@ module.exports.resizeAppUpload = async (event, context) => {
       .promise() // `.promise()` is unconventional and specific to aws-sdk
     console.debug('Getting file from '+srcKey +' on '+srcBucket)
 
-    let targetKey  = srcKey.replace(dirPrefix, sourceDir)
+    let targetKey  = sourceDir+srcKey
 
     try {
       await s3.headObject({
@@ -126,7 +125,7 @@ module.exports.resizeAppUpload = async (event, context) => {
       console.log("Saving to " + targetKey + " on " + targetBucket)
     }
     
-    targetKey  = srcKey.replace(dirPrefix, targetSmallDir)
+    targetKey  = targetSmallDir+srcKey
     const resizedBuffer2 = await transform(response.Body, targetSmallSize)
     //if(resizedBuffer2) console.info('Saving this buffer...'+resizedBuffer) 
     const res2 = await s3
@@ -142,7 +141,7 @@ module.exports.resizeAppUpload = async (event, context) => {
     small_ok = true
 
 
-    targetKey  = srcKey.replace(dirPrefix, targetMediumDir)
+    targetKey  = targetMediumDir+srcKey
     const resizedBuffer = await transform(response.Body, targetMediumSize)
     //if(resizedBuffer) console.info('Saving this buffer...'+resizedBuffer) 
     const res = await s3
@@ -152,7 +151,7 @@ module.exports.resizeAppUpload = async (event, context) => {
           Body: resizedBuffer
         })
       .promise();
-    let targetDefaultKey  = srcKey.replace(dirPrefix, targetDefaultDir)
+    let targetDefaultKey  = targetDefaultDir+srcKey
       await s3
       .putObject({
           Bucket: targetBucket,
@@ -165,7 +164,7 @@ module.exports.resizeAppUpload = async (event, context) => {
     await pgPool.query("insert into image_resize_actions VALUES (DEFAULT, '"+targetBucket+"', '"+srcKey+"', '"+targetKey+"', 'medium', 'OK', NOW(), NOW()) ")
     medium_ok = true
 
-    targetKey  = srcKey.replace(dirPrefix, targetHighDir)
+    targetKey  = targetHighDir+srcKey
     const resizedBuffer3 = await transform(response.Body, targetHighSize)
     //if(resizedBuffer3) console.info('Saving this buffer...'+resizedBuffer) 
     const res3 = await s3
