@@ -119,11 +119,13 @@ module.exports.resizeAppUpload = async (event, context) => {
       await s3.copyObject({
         Bucket: targetBucket, 
         Key: targetKey, 
-        CopySource: srcBucket + "/" + srcKey
+        CopySource: srcBucket + "/" + srcKey,
+        ACL:"public-read"
       })
       .promise()
       console.log("Saving to " + targetKey + " on " + targetBucket)
     }
+    
     
     targetKey  = targetSmallDir+srcKey
     const resizedBuffer2 = await transform(response.Body, targetSmallSize)
@@ -132,7 +134,8 @@ module.exports.resizeAppUpload = async (event, context) => {
       .putObject({
           Bucket: targetBucket,
           Key: targetKey,
-          Body: resizedBuffer2
+          Body: resizedBuffer2,
+          ACL:"public-read"
         })
       .promise()
     //console.log("Res: "+JSON.stringify(res2, null, 2))
@@ -148,7 +151,8 @@ module.exports.resizeAppUpload = async (event, context) => {
       .putObject({
           Bucket: targetBucket,
           Key: targetKey,
-          Body: resizedBuffer
+          Body: resizedBuffer,
+          ACL:"public-read"
         })
       .promise();
     let targetDefaultKey  = targetDefaultDir+srcKey
@@ -156,7 +160,8 @@ module.exports.resizeAppUpload = async (event, context) => {
       .putObject({
           Bucket: targetBucket,
           Key: targetDefaultKey,
-          Body: resizedBuffer
+          Body: resizedBuffer,
+          ACL:"public-read"
         })
       .promise()
     //console.log("Res: "+JSON.stringify(res, null, 2))
@@ -171,7 +176,8 @@ module.exports.resizeAppUpload = async (event, context) => {
       .putObject({
           Bucket: targetBucket,
           Key: targetKey,
-          Body: resizedBuffer3
+          Body: resizedBuffer3,
+          ACL:"public-read"
         })
       .promise()
     //console.log("Res: "+JSON.stringify(res3, null, 2))
