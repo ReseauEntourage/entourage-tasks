@@ -77,8 +77,8 @@ module.exports.resizeAvatar = async (event, context) => {
     
     try {
       await s3.headObject({
-        Bucket: srcBucket, 
-        Key: srcKey
+        Bucket: targetBucket, 
+        Key: sourceDir + keyFolders[keyFolders.length - 1]
       })
       .promise()
 
