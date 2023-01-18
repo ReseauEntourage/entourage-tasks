@@ -108,8 +108,8 @@ module.exports.resizeAppUpload = async (event, context) => {
 
     try {
       await s3.headObject({
-        Bucket: srcBucket, 
-        Key: srcKey
+        Bucket: targetBucket, 
+        Key: targetKey
       })
       .promise()
 
