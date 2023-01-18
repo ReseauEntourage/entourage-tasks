@@ -102,11 +102,11 @@ module.exports.resizeAvatar = async (event, context) => {
       var image = sharp(data);
       return image
         .metadata()
-        .then( function(size) {
+        .then( function(size, orientation) {
           const neww = Math.min(size.width,new_size);
           const newh = Math.min(size.height,new_size);
           //console.debug('Resizing from ' + size.width + 'x' + size.height + " to "+ neww + 'x' + newh) ;
-          return image.resize(neww, newh)
+          return image.resize(neww, newh,{fit: 'fill'}).withMetadata({orientation: orientation})
             .toBuffer() ;
         })
     }

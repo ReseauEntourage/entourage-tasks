@@ -63,12 +63,11 @@ async function transform(data, new_size)
   var image = sharp(data);
   return image
     .metadata()
-    .then( function(size) {
+    .then( function(size, orientation) {
       const newratio = Math.max(size.width/new_size, size.height/new_size, 1);
       const neww = Math.floor(size.width/newratio);
       const newh = Math.floor(size.height/newratio);
-      console.debug('Resizing from ' + size.width + 'x' + size.height + " to "+ neww + 'x' + newh+ ' using ratio=' +newratio) ;
-      return image.resize(neww, newh)
+      return image.resize(neww, newh,{fit: 'fill'}).withMetadata({orientation: orientation})
         .toBuffer() ;
     })
 }
