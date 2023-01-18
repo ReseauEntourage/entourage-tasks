@@ -27,7 +27,7 @@ provider:
     medium_target_size: 400
     medium_target_dir_prefix: "medium/"
     default_target_dir_prefix: ""
-    small_target_size: 60
+    small_target_size: 120
     small_target_dir_prefix: "small/"
     dir_prefix: ""
     source_dir: "source/"
