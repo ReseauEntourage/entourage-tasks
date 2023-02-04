@@ -151,9 +151,7 @@ module.exports.resizeAvatar = async (event, context) => {
      * Transformations end
      */
 
-    await publishMessage(process.env.channelId, 
-      "Uploaded profile image resize: OK on bucket: "+srcBucket+" for file "+ srcKey
-    );
+    //await publishMessage(process.env.channelId, "Uploaded profile image resize: OK on bucket: "+srcBucket+" for file "+ srcKey);
 
   } catch (error) {
     await publishMessage(process.env.channelId, 

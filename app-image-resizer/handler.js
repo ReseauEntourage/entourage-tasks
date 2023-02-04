@@ -125,7 +125,6 @@ module.exports.resizeAppUpload = async (event, context) => {
       console.log("Saving to " + targetKey + " on " + targetBucket)
     }
     
-    
     targetKey  = targetSmallDir+srcKey
     const resizedBuffer2 = await transform(response.Body, targetSmallSize)
     //if(resizedBuffer2) console.info('Saving this buffer...'+resizedBuffer) 
@@ -187,9 +186,7 @@ module.exports.resizeAppUpload = async (event, context) => {
     /*
      * Transformations end
      */
-    await publishMessage(process.env.channelId, 
-      "Uploaded image resize: OK on bucket: "+targetBucket+" for file "+ srcKey
-    );
+    //await publishMessage(process.env.channelId, "Uploaded image resize: OK on bucket: "+targetBucket+" for file "+ srcKey);
 
   } catch (error) {
     await publishMessage(process.env.channelId, 
