@@ -67,7 +67,10 @@ async function transform(data, new_size)
       const newratio = Math.max(size.width/new_size, size.height/new_size, 1);
       const neww = Math.floor(size.width/newratio);
       const newh = Math.floor(size.height/newratio);
-      return image.resize(neww, newh,{fit: 'fill'}).withMetadata({orientation: orientation})
+      return image
+        .jpeg({quality: 95})
+        .resize(neww, newh,{fit: 'fill'})
+        .withMetadata({orientation: orientation})
         .toBuffer() ;
     })
 }
