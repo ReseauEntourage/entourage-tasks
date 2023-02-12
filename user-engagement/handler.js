@@ -66,24 +66,33 @@ module.exports.aggregate = async () => {
         left join addresses sender_addresses on sender_addresses.id = address_id  \
         where message_type = 'text' ";
     
-      let result_insertquery5 = "insert into denorm_daily_engagements  (date, user_id, postal_code) \
+        let result_insertquery5 = "insert into denorm_daily_engagements  (date, user_id, postal_code) \
         select date(timezone('Europe/Paris', coalesce(requested_at, join_requests.created_at) at time zone 'UTC')), join_requests.user_id, \
         coalesce(case when country = 'FR' then postal_code end, 'unknown') \
         from join_requests  \
         join entourages on joinable_type = 'Entourage' and joinable_id = entourages.id and entourages.community = 'entourage' and entourages.group_type in ('action', 'outing') \
         where (group_type = 'outing' or (message is not null and trim(message, ' \\n') != ''))";
 
+        let result_insertqueryWatchResources = "with user_watchlist as ( \
+          select user_id, date_trunc('day', created_at) as date, \
+          sum(count(distinct resource_id)) over (partition by user_id order by  date_trunc('day', created_at) rows between unbounded preceding and current row) as total \
+          from users_resources ur where watched =true group by 1, 2)\
+        insert into denorm_daily_engagements  (date, user_id, postal_code) \
+        select date, user_id, 'unknown' from user_watchlist where total >=3";
+
       if(max_date != null) {
         result_insertquery2 += "and created_at >= '"+max_date.toISOString() + "' ";
         result_insertquery3 += "and chat_messages.created_at >= '"+max_date.toISOString() + "' ";
         result_insertquery4 += "and chat_messages.created_at >= '"+max_date.toISOString() + "' ";
         result_insertquery5 += "and coalesce(requested_at, join_requests.created_at) >= '"+max_date.toISOString() + "' ";
+        result_insertqueryWatchResources += "and date >= '"+max_date.toISOString() + "' ";
     }
     const conflict_string = " on conflict (date, user_id, postal_code) do nothing"
     result_insertquery2 += conflict_string;
     result_insertquery3 += conflict_string;
     result_insertquery4 += conflict_string;
     result_insertquery5 += conflict_string;
+    result_insertqueryWatchResources += conflict_string;
 
     const result2 = await pgPool.query(result_insertquery2)
     let rowCount = result2.rowCount
@@ -93,14 +102,16 @@ module.exports.aggregate = async () => {
     rowCount += result4.rowCount
     const result5 = await pgPool.query(result_insertquery5)
     rowCount += result5.rowCount
+    const resultWatchResources = await pgPool.query(result_insertqueryWatchResources)
+    rowCount += resultWatchResources.rowCount
 
     let start = "beginning";
     if(max_date != null ) start = max_date.toISOString();
 
-    await publishMessage(process.env.channelId, 
+    /*await publishMessage(process.env.channelId, 
       "User Engagement Consolidation: OK on stage:"+process.env.stage_name+"\n "
       + rowCount + " new daily engagements from "+start+" to now."
-    );
+    );*/
     // Response body must be JSON.
     return {
       statusCode: 200,
