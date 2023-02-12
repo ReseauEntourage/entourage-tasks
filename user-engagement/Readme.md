@@ -70,8 +70,14 @@ Avec la nouvelle app, on aimerait qu'un utilisateur soit considéré comme engag
 ### créer une contribution ou demande
 ### rejoindre une contribution ou demande [users sur ancienne app]
 ### créer un événement
+
+
 ### participer à un événement
 ### créer un groupe
+SELECT user_id, created_at, postal_code
+FROM public.neighborhoods
+where status!='deleted';
+
 ## rejoindre un groupe (ATTENTION il faut exclure le groupe de voisins associé par défaut à tout utilisateur se connectant à la v8)
 ## voir au moins 3 contenus pédagogiques
 

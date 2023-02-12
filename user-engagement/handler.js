@@ -80,8 +80,13 @@ module.exports.aggregate = async () => {
         insert into denorm_daily_engagements  (date, user_id, postal_code) \
         select date, user_id, 'unknown' from user_watchlist where total >=3";
 
+        let result_insertqueryCreationGroup = " insert into denorm_daily_engagements  (date, user_id, postal_code) \
+          SELECT date(timezone('Europe/Paris', created_at at time zone 'UTC')), user_id, postal_code \
+          FROM public.neighborhoods where status!='deleted'";
+
       if(max_date != null) {
         result_insertquery2 += "and created_at >= '"+max_date.toISOString() + "' ";
+        result_insertqueryCreationGroup += "and created_at >= '"+max_date.toISOString() + "' ";
         result_insertquery3 += "and chat_messages.created_at >= '"+max_date.toISOString() + "' ";
         result_insertquery4 += "and chat_messages.created_at >= '"+max_date.toISOString() + "' ";
         result_insertquery5 += "and coalesce(requested_at, join_requests.created_at) >= '"+max_date.toISOString() + "' ";
@@ -93,6 +98,7 @@ module.exports.aggregate = async () => {
     result_insertquery4 += conflict_string;
     result_insertquery5 += conflict_string;
     result_insertqueryWatchResources += conflict_string;
+    result_insertqueryCreationGroup += conflict_string;
 
     const result2 = await pgPool.query(result_insertquery2)
     let rowCount = result2.rowCount
@@ -104,6 +110,8 @@ module.exports.aggregate = async () => {
     rowCount += result5.rowCount
     const resultWatchResources = await pgPool.query(result_insertqueryWatchResources)
     rowCount += resultWatchResources.rowCount
+    const resultCreationGroup = await pgPool.query(result_insertqueryCreationGroup)
+    rowCount += resultCreationGroup.rowCount
 
     let start = "beginning";
     if(max_date != null ) start = max_date.toISOString();
