@@ -60,7 +60,7 @@ async function publishMessage(id, text) {
   */
 async function transform(data, new_size)
 {
-  var image = sharp(data);
+  var image = sharp(data, { failOn: 'truncated' });
   return image
     .metadata()
     .then( function(size, orientation) {

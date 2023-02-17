@@ -159,7 +159,7 @@ module.exports.resizeAvatar = async (event, context) => {
       + "\n Error: "+ JSON.stringify()
     );
 
-    if(small_ok!==true) await pgPool.query("insert into image_resize_actions VALUES (DEFAULT, '"+srcBucket+"', '"+srcKey+"', '', 'medium', 'Error', NOW(), NOW()) ")
+    if(medium_ok!==true) await pgPool.query("insert into image_resize_actions VALUES (DEFAULT, '"+srcBucket+"', '"+srcKey+"', '', 'medium', 'Error', NOW(), NOW()) ")
     if(small_ok!==true) await pgPool.query("insert into image_resize_actions VALUES (DEFAULT, '"+srcBucket+"', '"+srcKey+"', '', 'small', 'Error', NOW(), NOW()) ")
 
     console.error(error)
