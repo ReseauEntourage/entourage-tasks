@@ -9,6 +9,7 @@ npm install
 echo '----cleaning user_engagement'
 serverless deploy -s prod
 git tag --force 'user-engagement-latest-prod'
+git push --force origin 'user-engagement-latest-prod'
 echo '----unstashing code'
 git stash apply
 
