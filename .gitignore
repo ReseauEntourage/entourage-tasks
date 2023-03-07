@@ -1,2 +1,7 @@
 ﻿entourage-images-development
 node_modules
+gandi-dns/.terraform
+gandi-dns/.terraform.lock.hcl
+*.tfstate
+*.tfstate.backup
+gandi-dns/terraform.tfvars

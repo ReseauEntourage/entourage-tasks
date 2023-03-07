@@ -1,0 +1,134 @@
+########################## Entourage
+
+@ 10800 IN SOA ns1.gandi.net. hostmaster.gandi.net. 1676567412 10800 3600 604800 10800
+26834687 10800 IN CNAME sendgrid.net.
+3jb4jlxckym6nx79bd37 10800 IN CNAME verify.squarespace.com.
+@ 10800 IN A 52.209.13.85
+@ 1800 IN CAA 0 issue "awstrust.com"
+@ 1800 IN CAA 0 issue "letsencrypt.org"
+@ 3600 IN MX 1 aspmx.l.google.com.
+@ 3600 IN MX 10 aspmx2.googlemail.com.
+@ 3600 IN MX 10 aspmx3.googlemail.com.
+@ 3600 IN MX 5 alt1.aspmx.l.google.com.
+@ 3600 IN MX 5 alt2.aspmx.l.google.com.
+@ 1800 IN TXT "MS=ms67545121"
+@ 1800 IN TXT "facebook-domain-verification=rigmc0upn5saymfsyj0gaxms10sp8o"
+@ 1800 IN TXT "google-site-verification=GHi-x068IxM3UKsNbLeb7dmo-LSQK8DMJzg_A5N1bLU"
+@ 1800 IN TXT "google-site-verification=JdInQagqICr-_T2hzyyuIEveBrXg0qgQK8jymP5prug"
+@ 1800 IN TXT "google-site-verification=kUujR_SeLhtzcwVwzaUrNjtvPNxTTZLwjMMA1aCPbH4"
+@ 1800 IN TXT "google-site-verification=z8CEhhk1sWwuGTGSp_nnGtztuNyEKNy4u8NKUhu6WIs"
+@ 1800 IN TXT "v=spf1 include:spf.mailjet.com include:_spf.google.com include:servers.mcsv.net include:sendgrid.net include:_spf.salesforce.com ~all"
+_0aaee4c22f96ab9b49ce64eec8683b64.backoffice-preprod 1800 IN CNAME _b7c6518f863f415a30cf0a8b56621bb5.wggjkglgrm.acm-validations.aws.
+_1348a62c0480f6a1eba261bc4d8840b3.metabase-analytics-2 10800 IN CNAME _3f4ddac8851fd681bc1db00492782720.nhsllhhtvj.acm-validations.aws.
+_3205c9699021609662d10cb00a137d91.linkedout-vendeeglobe 300 IN CNAME _4a692665b7442e6dd5aa87033b74790d.auiqqraehs.acm-validations.aws.
+_32c31fe1de6c81f14b8051a9bf7bf549.admin-preprod 1800 IN CNAME _e1a4ce633ef256bd210a1d70d7f46072.wggjkglgrm.acm-validations.aws.
+_3e640a4e12cb5bc6b9aecffb9480e3ff 10800 IN CNAME C15E6C56FDB197485397AE27CC98221D.1F951DD2D969CF01D2BC2507096269ED.d6de3681d8f3827433a7.comodoca.com.
+_3e640a4e12cb5bc6b9aecffb9480e3ff 10800 IN CNAME c15e6c56fdb197485397ae27cc98221d.1f951dd2d969cf01d2bc2507096269ed.d6de3681d8f3827433a7.comodoca.com.
+_4b1bfb6d139a8406348990d921a53d3c.linkedout 300 IN CNAME _31e078d25bec0bbf26950015cec4a520.auiqqraehs.acm-validations.aws.
+_8e8096493714410971f935db88f55817.metabase-analytics 1800 IN CNAME _a43dd0a7fb8720a991d5248467c51c9d.ltfvzjuylp.acm-validations.aws.
+_90035ded220a9211d851bc3f69415cdb.api-preprod 1800 IN CNAME _b97ff9de3c3e05892c79ffe6e21fce31.wggjkglgrm.acm-validations.aws.
+_ae89e093cd81844e4981fe853bf55765.api-preprod.linkedout 300 IN CNAME _3bbe2a4b3b9b2ea44070bd39057715a5.auiqqraehs.acm-validations.aws.
+_b4709f1935e8c76cec47949dbcdced9f.api.linkedout 300 IN CNAME _28463db0368c469ec2e0f98721a68c77.auiqqraehs.acm-validations.aws.
+_d815816c1c6603f1791d6029aa4658e0.api-preprod-aws 1800 IN CNAME _1129fc695e04387697b136c6abcd8f10.bsgbmzkfwj.acm-validations.aws.
+_dmarc 600 IN TXT "v=DMARC1; p=none; pct=100; rua=mailto:re+pxgvmicrc7q@dmarc.postmarkapp.com; sp=none; aspf=r;"
+admin 10800 IN CNAME admin.entourage.social.herokudns.com.
+admin-preprod 1800 IN CNAME solid-bass-hslt86c10ke76o9fpaufjsq9.herokudns.com.
+admin-preprod-heroku 1800 IN CNAME admin-preprod.entourage.social.herokudns.com.
+allumonslefeudelasolidarite 10800 IN CNAME ext-cust.squarespace.com.
+ambassadeurs 600 IN CNAME ec2-52-209-13-85.eu-west-1.compute.amazonaws.com.
+api 300 IN CNAME api.entourage.social.herokudns.com.
+api-preprod 300 IN CNAME contoured-honeydew-yjkpre7rhisna16fm738ojbp.herokudns.com.
+api-preprod-aws 300 IN CNAME entourage-preprod-lb-253879648.eu-west-1.elb.amazonaws.com.
+api-preprod-heroku 300 IN CNAME peaceful-squid-vyjxysor2g51cssb3v0m7azi.herokudns.com.
+api-preprod.linkedout 300 IN CNAME lyq3b1ryvk.execute-api.eu-west-1.amazonaws.com.
+api.linkedout 300 IN CNAME 71l9vio4ba.execute-api.eu-west-1.amazonaws.com.
+app 600 IN CNAME evening-marlin-0a5660u3x2b3jmswng7aweuk.herokudns.com.
+asso 1800 IN CNAME ec2-52-209-13-85.eu-west-1.compute.amazonaws.com.
+backoffice 10800 IN CNAME backoffice.entourage.social.herokudns.com.
+backoffice-preprod 10800 IN CNAME entourage-preprod-lb-253879648.eu-west-1.elb.amazonaws.com.
+beta 300 IN CNAME ec2-52-209-13-85.eu-west-1.compute.amazonaws.com.
+beta.linkedout 1800 IN CNAME ec2-52-209-13-85.eu-west-1.compute.amazonaws.com.
+beta.webapp 300 IN CNAME cardiovascular-squash-k08dsed8omeoz0malul27c66.herokudns.com.
+blog 300 IN CNAME ec2-52-209-13-85.eu-west-1.compute.amazonaws.com.
+bonjour 10800 IN CNAME ext-cust.squarespace.com.
+bonjour-bonjour 10800 IN CNAME ext-cust.squarespace.com.
+c2c3hltg2nzlt8ykcnbf 10800 IN CNAME verify.squarespace.com.
+contenu 10800 IN CNAME proxy.plezi.co.
+don 1800 IN CNAME ec2-52-209-13-85.eu-west-1.compute.amazonaws.com.
+doublecadeau 10800 IN A 185.42.117.108
+doublecadeau 10800 IN A 185.42.117.109
+doublecadeau 10800 IN A 46.252.181.103
+doublecadeau 10800 IN A 46.252.181.104
+doublecadeau 10800 IN CNAME domain.par.clever-cloud.com.
+em312 1800 IN CNAME u7979631.wl132.sendgrid.net.
+em4877 10800 IN CNAME u26834687.wl188.sendgrid.net.
+entourage-alt._domainkey 10800 IN CNAME entourage-alt.4yoele.custdkim.salesforce.com.
+entourage._domainkey 10800 IN CNAME entourage.v8889t.custdkim.salesforce.com.
+f1cdd767760b8e790c16e3f85af3b080 10800 IN CNAME c0052e0be46efe5f2343713725f3eff1ec4a03af.comodoca.com.
+google._domainkey 1800 IN TXT "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAllsDv66z9MMx7rmVF3Ppq/7TFQ17bFzukNxpm02J18SQZn/a1sXxtRJaYAMXTfM8IqRscvUGjSxlpSNzvU9I1I8u" "3YvjU3G+we8WfGcjZQQK2yxMwErGtk3e7NJnMpRy0jQ1BrSSWvmWyPqdPoNlM4yihsQF23xaBX0Fa0ReaN77ijGTdL22jqQXMwK6a0Cz+nl/HRWROsFlKgT3VUYVkAcUCXWc0MZ65PkuNL0ZzxFOh2" "TfUC4+6z9MSxqQJE6ZJrIhsUrcE0C6OgJqyNgRWq73KM+sv2TYdsxKfmzlvgVM9Txm8sm4/3KS3wd7mbpQqXuQ8+4jVIzkzenRF37NJwIDAQAB"
+imap 10800 IN CNAME access.mail.gandi.net.
+k1._domainkey 10800 IN CNAME dkim.mcsv.net.
+lafrancesengage 10800 IN CNAME webredir.vip.gandi.net.
+lefeudelasolidarite 10800 IN CNAME ext-cust.squarespace.com.
+lesbonnesondes 1800 IN CNAME comparative-ostrich-ixoltaw8f5b4y6j0mtq0cxxa.herokudns.com.
+lien 10800 IN CNAME sendgrid.net.
+linkedout-vendeeglobe 300 IN CNAME dugxyemvj88k4.cloudfront.net.
+mailjet._domainkey 3600 IN TXT "k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCrtZuQzrpsJAvyZ4DucA7QYVfShioY7KoQhPsfpSFLwZ9gm+RcZ2unyNCEKr2vSsMVDAT2Yfg5RESbb3FGMpk8rH3EK97bz11w334lNF494R4sTQ11bW44XTk8SaNyW2ZnJmQ9KuiewcKcDwILbn9gntRS8Yk1G+3mGA45ztg9aQIDAQAB"
+mandrill._domainkey 1800 IN TXT "v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCrLHiExVd55zd/IQ/J/mRwSRMAocV/hMB3jXwaHH36d9NaVynQFYV8NaWi69c1veUtRzGt7yAioXqLj7Z4TeEUoOLgrKsn8YnckGs9i3B3tVFB+Ch/4mPhXWiNfNdynHWBcPcbJ8kjEQ2U8y78dHZj1YeRXXVvWob2OaKynO8/lQIDAQAB;"
+metabase-analytics 600 IN CNAME metabase-env.eba-ahsiex7m.eu-west-1.elasticbeanstalk.com.
+ovyi5sujczyp.contenu 10800 IN CNAME gv-m5n4pbczhx6dc4.dv.googlehosted.com.
+p._domainkey 10800 IN CNAME p.domainkey.u26834687.wl188.sendgrid.net.
+p2._domainkey 10800 IN CNAME p2.domainkey.u26834687.wl188.sendgrid.net.
+pop 10800 IN CNAME access.mail.gandi.net.
+preprod 600 IN CNAME ec2-52-209-13-85.eu-west-1.compute.amazonaws.com.
+rzbb499fy643rdntmas2 10800 IN CNAME verify.squarespace.com.
+s1._domainkey 10800 IN CNAME s1.domainkey.u26834687.wl188.sendgrid.net.
+s1._domainkey 10800 IN CNAME s1.domainkey.u7979631.wl132.sendgrid.net.
+s2._domainkey 10800 IN CNAME s2.domainkey.u26834687.wl188.sendgrid.net.
+s2._domainkey 10800 IN CNAME s2.domainkey.u7979631.wl132.sendgrid.net.
+smtp 10800 IN CNAME relay.mail.gandi.net.
+sna4ds2k85d23lg3r53p 10800 IN CNAME verify.squarespace.com.
+status 600 IN CNAME stats.uptimerobot.com.
+taxe-apprentissage 10800 IN CNAME ext-cust.squarespace.com.
+webmail 10800 IN CNAME webmail.gandi.net.
+ws7c6mj5zgy2dy5zcyef 10800 IN CNAME verify.squarespace.com.
+www 10800 IN CNAME ec2-52-209-13-85.eu-west-1.compute.amazonaws.com.
+www.ambassadeurs 600 IN CNAME ec2-52-209-13-85.eu-west-1.compute.amazonaws.com.
+www.taxe-apprentissage 10800 IN CNAME ext-cust.squarespace.com.
+
+
+################## LinkedOut
+
+@ 10800 IN SOA ns1.gandi.net. hostmaster.gandi.net. 1676567977 10800 3600 604800 10800
+@ 300 IN A 52.209.13.85
+@ 1800 IN MX 1 ASPMX.L.GOOGLE.COM.
+@ 1800 IN MX 10 ALT3.ASPMX.L.GOOGLE.COM.
+@ 1800 IN MX 10 ALT4.ASPMX.L.GOOGLE.COM.
+@ 1800 IN MX 5 ALT1.ASPMX.L.GOOGLE.COM.
+@ 1800 IN MX 5 ALT2.ASPMX.L.GOOGLE.COM.
+@ 1800 IN TXT "google-site-verification=m4DVGcnfB7BRsN_Irxpb9yoyWoV_1SyEz8tMS4EaE0s"
+@ 1800 IN TXT "google-site-verification=zNJJjm4_FlH7TsDSG6SOYiPLerDSmxNjZKMsQpjki2g"
+@ 1800 IN TXT "v=spf1 -all"
+api 10800 IN CNAME parallel-falls-mgyqelu7rie5yrcaz84bngq9.herokudns.com.
+blog 300 IN A 52.209.13.85
+lx3f29s6b2s55j2mpdpw 10800 IN CNAME verify.squarespace.com.
+taxe-apprentissage 10800 IN CNAME ext-cust.squarespace.com.
+www 300 IN CNAME avian-camellia-0ug7mqz9pab9vmpfvo8e3vtw.herokudns.com.
+www.taxe-apprentissage 10800 IN CNAME ext-cust.squarespace.com.
+
+
+#################### Simplecommebonjour
+
+@ 10800 IN SOA ns1.gandi.net. hostmaster.gandi.net. 1676483469 10800 3600 604800 10800
+@ 600 IN A 52.209.13.85
+@ 10800 IN MX 10 spool.mail.gandi.net.
+@ 10800 IN MX 50 fb.mail.gandi.net.
+@ 1800 IN TXT "4|http://www.simplecommebonjour.org"
+@ 1800 IN TXT "facebook-domain-verification=a4k3p8ro972nljxu7e691re7v7a7gm"
+@ 1800 IN TXT "google-site-verification=uW1yi-4xIJGzCedwK7-crc2fYF6fEoWf1_prjwek5A0"
+@ 1800 IN TXT "v=spf1 include:_mailcust.gandi.net ?all"
+beta 600 IN CNAME ec2-34-242-53-3.eu-west-1.compute.amazonaws.com.
+betaadminscb 300 IN CNAME reticulated-yam-ti0do2mbn705asdn4qolv7bh.herokudns.com.
+oldwww 600 IN A 34.242.53.3
+webmail 10800 IN CNAME webmail.gandi.net.
+www 600 IN CNAME simplecommebonjour.org.
