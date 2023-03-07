@@ -103,10 +103,9 @@ module.exports.resizeAvatar = async (event, context) => {
       return image
         .metadata()
         .then( function(size, orientation) {
-          const neww = Math.min(size.width,new_size);
-          const newh = Math.min(size.height,new_size);
-          //console.debug('Resizing from ' + size.width + 'x' + size.height + " to "+ neww + 'x' + newh) ;
-          return image.resize(neww, newh,{fit: 'fill'}).withMetadata({orientation: orientation})
+          const newsize = Math.min(size.height,size.width,new_size);
+          //console.debug('Resizing from ' + size.width + 'x' + size.height + " to "+ newsize + 'x' + newsize) ;
+          return image.resize(newsize, newsize,{fit: 'cover'}).withMetadata({orientation: orientation})
             .toBuffer() ;
         })
     }
