@@ -9,7 +9,7 @@ custom:
     prod: 'production-thumb'
   dir_prefix:
     dev: 'staging/'
-    staging: 'users/'
+    staging: ''
     prod: ''
   connection-string:
     dev: 'PREPROD_DATABASE_URL'
